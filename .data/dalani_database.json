@@ -192,8 +192,8 @@
         "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=1000&q=80"
       ],
       "advertiser": {
-        "id": "adv-2",
-        "name": "شركة الصرح العقارية الحديثة",
+        "id": "adv-1",
+        "name": "هشام عبد الرحمن القدسي",
         "type": "organization",
         "phone": "777123456",
         "phoneVerified": true,
@@ -270,8 +270,8 @@
         "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=1000&q=80"
       ],
       "advertiser": {
-        "id": "adv-3",
-        "name": "عبد الملك سنان الغولي",
+        "id": "adv-1",
+        "name": "هشام عبد الرحمن القدسي",
         "type": "individual",
         "phone": "773556677",
         "phoneVerified": true,
@@ -349,8 +349,8 @@
         "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1000&q=80"
       ],
       "advertiser": {
-        "id": "adv-2",
-        "name": "شركة الصرح العقارية الحديثة",
+        "id": "adv-1",
+        "name": "هشام عبد الرحمن القدسي",
         "type": "organization",
         "phone": "777123456",
         "phoneVerified": true,
@@ -421,8 +421,8 @@
         "https://images.unsplash.com/photo-1502005229762-ee1b2da97ba5?auto=format&fit=crop&w=1000&q=80"
       ],
       "advertiser": {
-        "id": "adv-4",
-        "name": "صالح سالم باوزير",
+        "id": "adv-1",
+        "name": "هشام عبد الرحمن القدسي",
         "type": "individual",
         "phone": "772334411",
         "phoneVerified": true,
@@ -486,8 +486,8 @@
         "https://images.unsplash.com/photo-1528698827591-e19ccd7bc23d?auto=format&fit=crop&w=1000&q=80"
       ],
       "advertiser": {
-        "id": "adv-5",
-        "name": "معين عبد الله السقاف",
+        "id": "adv-1",
+        "name": "هشام عبد الرحمن القدسي",
         "type": "individual",
         "phone": "775667788",
         "phoneVerified": true,
@@ -549,8 +549,8 @@
         "https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1200&q=80"
       ],
       "advertiser": {
-        "id": "adv-6",
-        "name": "عمار ناصر المرادي",
+        "id": "adv-1",
+        "name": "هشام عبد الرحمن القدسي",
         "type": "individual",
         "phone": "711223344",
         "phoneVerified": true,
@@ -730,8 +730,8 @@
         "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=1000&q=80"
       ],
       "advertiser": {
-        "id": "adv-2",
-        "name": "شركة الصرح العقارية الحديثة",
+        "id": "adv-1",
+        "name": "هشام عبد الرحمن القدسي",
         "type": "organization",
         "phone": "777123456",
         "phoneVerified": true,
@@ -1017,6 +1017,78 @@
   ],
   "auditLogs": [
     {
+      "id": "log-1792251516933-43",
+      "timestamp": "١٧‏/١٠‏/٢٠٢٦، ٣:٣٨ م",
+      "userId": "usr-sys-admin",
+      "userName": "المهندس / مدير النظام العام",
+      "userRole": "system_admin",
+      "action": "فحص اتصال حي بخدمة تكامل خارجية",
+      "targetType": "system_setting",
+      "targetId": "int-1",
+      "result": "success",
+      "details": "فحص الاتصال بخدمة [بوابة رسائل يمن موبايل (Yemen Mobile SMS Gateway)] - الحالة: متصل، زمن الاستجابة: 72ms"
+    },
+    {
+      "id": "log-1792251508504-321",
+      "timestamp": "١٧‏/١٠‏/٢٠٢٦، ٣:٣٨ م",
+      "userId": "usr-sys-admin",
+      "userName": "المهندس / مدير النظام العام",
+      "userRole": "system_admin",
+      "action": "إصلاح تلقائي لسلامة البيانات والعلاقات",
+      "targetType": "system_setting",
+      "targetId": "database_repair",
+      "result": "success",
+      "details": "تم إصلاح 7 علاقة وسجلات يتيمة بنجاح، وجميع البيانات مترابطة الآن."
+    },
+    {
+      "id": "log-1792251492515-128",
+      "timestamp": "١٧‏/١٠‏/٢٠٢٦، ٣:٣٨ م",
+      "userId": "usr-sys-admin",
+      "userName": "المهندس / مدير النظام العام",
+      "userRole": "system_admin",
+      "action": "حظر عنوان IP مشبوه في طبقة الخادم",
+      "targetType": "security",
+      "targetId": "203.0.113.195",
+      "result": "warning",
+      "details": "تم حظر العنوان [203.0.113.195] نهائياً. السبب: تكرار محاولات التسلل"
+    },
+    {
+      "id": "log-1792251479872-203",
+      "timestamp": "١٧‏/١٠‏/٢٠٢٦، ٣:٣٧ م",
+      "userId": "usr-sys-admin",
+      "userName": "المهندس / مدير النظام العام",
+      "userRole": "system_admin",
+      "action": "إنشاء نسخة احتياطية كاملة للمنظومة",
+      "targetType": "backup",
+      "targetId": "bkp-1792251479871",
+      "result": "success",
+      "details": "تم حفظ نسخة احتياطية جديدة [dalani_backup_2026-10-17T15-37-59-870Z.json] بحجم 61.8 كيلوبايت وتوقيع SHA256 موثق"
+    },
+    {
+      "id": "log-1792251464313-105",
+      "timestamp": "١٧‏/١٠‏/٢٠٢٦، ٣:٣٧ م",
+      "userId": "usr-sys-admin",
+      "userName": "المهندس / مدير النظام العام",
+      "userRole": "system_admin",
+      "action": "إنهاء جلسة نشطة من الخادم",
+      "targetType": "security",
+      "targetId": "ses-104",
+      "result": "warning",
+      "details": "تم إنهاء جلسة المستخدم [الشيخ محمد الجوفي] وعنوان IP [178.130.40.11] فورياً من الخادم"
+    },
+    {
+      "id": "log-1792251454983-519",
+      "timestamp": "١٧‏/١٠‏/٢٠٢٦، ٣:٣٧ م",
+      "userId": "usr-seeker",
+      "userName": "أصيل محمد الحكيمي",
+      "userRole": "seeker",
+      "action": "محاولة وصول غير مصرح بها",
+      "targetType": "user",
+      "targetId": "usr-seeker",
+      "result": "denied",
+      "details": "تم رفض الوصول إلى المسار /api/admin/reports/summary - الدور الحالي [seeker] غير مصرح له."
+    },
+    {
       "id": "log-1792158866923-708",
       "timestamp": "١٦‏/١٠‏/٢٠٢٦، ١:٥٤ م",
       "userId": "usr-mod-1",
@@ -1223,7 +1295,492 @@
     }
   ],
   "meta": {
-    "lastUpdated": "2026-10-16T14:06:31.492Z",
+    "lastUpdated": "2026-10-17T15:38:36.934Z",
     "version": "1.0.0"
-  }
+  },
+  "staff": [
+    {
+      "id": "stf-100",
+      "userId": "usr-sys-admin",
+      "name": "المهندس / مدير النظام العام",
+      "email": "system_admin@dalani-ye.com",
+      "phone": "770000000",
+      "role": "system_admin",
+      "department": "management",
+      "activeStatus": true,
+      "permissions": [
+        "all_administrative_powers",
+        "view_sensitive_docs",
+        "manage_staff",
+        "manage_security",
+        "backups_and_restore"
+      ],
+      "createdAt": "2026-01-15",
+      "lastLoginAt": "2026-10-17 10:30",
+      "notes": "حساب موظف معتمد في الهيكل الإداري للمنصة"
+    },
+    {
+      "id": "stf-101",
+      "userId": "usr-mod-1",
+      "name": "عصام العديني (مسؤول مراجعة المحتوى)",
+      "email": "moderator@dalani-ye.com",
+      "phone": "770112233",
+      "role": "moderator",
+      "department": "moderation",
+      "activeStatus": true,
+      "permissions": [
+        "view_all_listings",
+        "moderate_listings",
+        "request_changes",
+        "suspend_listings"
+      ],
+      "createdAt": "2026-01-15",
+      "lastLoginAt": "2026-10-17 10:30",
+      "notes": "حساب موظف معتمد في الهيكل الإداري للمنصة"
+    },
+    {
+      "id": "stf-102",
+      "userId": "usr-ver-1",
+      "name": "سالم بن محفوظ (مسؤول التحقق والوثائق)",
+      "email": "verifier@dalani-ye.com",
+      "phone": "770223344",
+      "role": "verifier",
+      "department": "verification",
+      "activeStatus": true,
+      "permissions": [
+        "view_all_listings",
+        "view_sensitive_deeds",
+        "verify_documents",
+        "issue_badges"
+      ],
+      "createdAt": "2026-01-15",
+      "lastLoginAt": "2026-10-17 10:30",
+      "notes": "حساب موظف معتمد في الهيكل الإداري للمنصة"
+    },
+    {
+      "id": "stf-103",
+      "userId": "usr-rep-1",
+      "name": "مختار الهمداني (مسؤول البلاغات والقضايا)",
+      "email": "reporter_admin@dalani-ye.com",
+      "phone": "770334455",
+      "role": "reporter_admin",
+      "department": "disputes",
+      "activeStatus": true,
+      "permissions": [
+        "view_reports",
+        "investigate_reports",
+        "resolve_reports",
+        "suspend_abusive_ads"
+      ],
+      "createdAt": "2026-01-15",
+      "lastLoginAt": "2026-10-17 10:30",
+      "notes": "حساب موظف معتمد في الهيكل الإداري للمنصة"
+    },
+    {
+      "id": "stf-104",
+      "userId": "usr-sup-1",
+      "name": "خلود العبسي (مسؤول الدعم الفني)",
+      "email": "support@dalani-ye.com",
+      "phone": "770445566",
+      "role": "support",
+      "department": "support",
+      "activeStatus": true,
+      "permissions": [
+        "view_tickets",
+        "reply_tickets",
+        "close_tickets"
+      ],
+      "createdAt": "2026-01-15",
+      "lastLoginAt": "2026-10-17 10:30",
+      "notes": "حساب موظف معتمد في الهيكل الإداري للمنصة"
+    }
+  ],
+  "rolesMatrix": {
+    "visitor": [
+      "view_public_listings",
+      "search_filter"
+    ],
+    "seeker": [
+      "view_public_listings",
+      "search_filter",
+      "save_favorites",
+      "open_tickets"
+    ],
+    "advertiser": [
+      "view_public_listings",
+      "search_filter",
+      "save_favorites",
+      "create_listings",
+      "edit_own_listings",
+      "open_tickets"
+    ],
+    "org_manager": [
+      "view_public_listings",
+      "search_filter",
+      "save_favorites",
+      "create_listings",
+      "edit_own_listings",
+      "manage_org_staff",
+      "assign_agent_listings"
+    ],
+    "org_agent": [
+      "view_public_listings",
+      "search_filter",
+      "save_favorites",
+      "create_listings",
+      "edit_assigned_listings"
+    ],
+    "moderator": [
+      "view_public_listings",
+      "view_all_listings",
+      "moderate_listings",
+      "request_changes",
+      "suspend_listings"
+    ],
+    "verifier": [
+      "view_public_listings",
+      "view_all_listings",
+      "view_sensitive_deeds",
+      "verify_phone",
+      "verify_documents",
+      "issue_badges"
+    ],
+    "reporter_admin": [
+      "view_public_listings",
+      "view_all_listings",
+      "view_reports",
+      "investigate_reports",
+      "resolve_reports",
+      "suspend_abusive_ads"
+    ],
+    "support": [
+      "view_public_listings",
+      "view_tickets",
+      "reply_tickets",
+      "close_tickets"
+    ],
+    "accountant": [
+      "view_public_listings",
+      "view_financial_overview",
+      "view_listing_billing",
+      "export_financial_reports"
+    ],
+    "system_admin": [
+      "manage_users",
+      "manage_staff",
+      "manage_roles_matrix",
+      "manage_security",
+      "terminate_sessions",
+      "block_ips",
+      "view_audit_trail",
+      "manage_settings",
+      "manage_feature_flags",
+      "manage_backups",
+      "view_system_errors",
+      "test_integrations",
+      "resolve_escalations",
+      "repair_database",
+      "view_sensitive_data"
+    ]
+  },
+  "activeSessions": [
+    {
+      "id": "ses-101",
+      "sessionId": "sess_live_admin_9921",
+      "userId": "usr-admin-01",
+      "userName": "أ. د. خالد الرياشي",
+      "userRole": "system_admin",
+      "ipAddress": "185.190.22.45",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/129.0",
+      "deviceType": "desktop",
+      "location": "صنعاء، اليمن",
+      "startedAt": "2026-10-17 07:15",
+      "lastActiveAt": "الآن",
+      "isCurrentSession": true
+    },
+    {
+      "id": "ses-102",
+      "sessionId": "ses_mod_8471",
+      "userId": "usr-mod-01",
+      "userName": "م. مروان القدسي",
+      "userRole": "moderator",
+      "ipAddress": "82.114.160.18",
+      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)",
+      "deviceType": "desktop",
+      "location": "تعز، اليمن",
+      "startedAt": "2026-10-17 08:00",
+      "lastActiveAt": "منذ 5 دقائق"
+    },
+    {
+      "id": "ses-103",
+      "sessionId": "ses_ver_5219",
+      "userId": "usr-ver-01",
+      "userName": "د. سمير الذماري",
+      "userRole": "verifier",
+      "ipAddress": "134.35.12.90",
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+      "deviceType": "desktop",
+      "location": "ذمار، اليمن",
+      "startedAt": "2026-10-17 08:20",
+      "lastActiveAt": "منذ 12 دقيقة"
+    }
+  ],
+  "threats": [
+    {
+      "id": "th-1",
+      "ipAddress": "91.240.118.82",
+      "attemptType": "brute_force",
+      "targetUsername": "admin@dalani-ye.com",
+      "occurredAt": "2026-10-17 04:12",
+      "country": "مجهول",
+      "city": "مجهول",
+      "severity": "high",
+      "blocked": true,
+      "details": "تجاوز حد المحاولات الفاشلة (8 محاولات متتالية لتخمين كلمة المرور)"
+    },
+    {
+      "id": "th-2",
+      "ipAddress": "194.26.29.112",
+      "attemptType": "unauthorized_role_elevation",
+      "targetUsername": "usr-visitor-guest",
+      "occurredAt": "2026-10-17 06:45",
+      "country": "روسيا",
+      "city": "موسكو",
+      "severity": "critical",
+      "blocked": true,
+      "details": "محاولة إرسال ترويسة x-user-role: system_admin من مصدر غير موثق"
+    },
+    {
+      "id": "th-3",
+      "ipAddress": "185.220.101.5",
+      "attemptType": "suspicious_headers",
+      "targetUsername": "غير محدد",
+      "occurredAt": "2026-10-17 07:05",
+      "country": "ألمانيا",
+      "city": "فرانكفورت",
+      "severity": "medium",
+      "blocked": false,
+      "details": "مسح آلي لمسارات الخادم عبر روبوت فحص أمني غير مصرح"
+    }
+  ],
+  "blockedIps": [
+    {
+      "ip": "203.0.113.195",
+      "reason": "تكرار محاولات التسلل",
+      "blockedAt": "2026-10-17 15:38",
+      "blockedBy": "المهندس / مدير النظام العام"
+    },
+    {
+      "ip": "91.240.118.82",
+      "reason": "محاولات تخمين متكررة",
+      "blockedAt": "2026-10-17 04:12",
+      "blockedBy": "النظام الآلي"
+    },
+    {
+      "ip": "194.26.29.112",
+      "reason": "محاولة تزوير ترويسات الصلاحية",
+      "blockedAt": "2026-10-17 06:45",
+      "blockedBy": "النظام الآلي"
+    }
+  ],
+  "systemSettings": {
+    "platformName": "منصة دلالي العقارية اليمنية",
+    "platformTagline": "المنظومة الوطنية الموثوقة للتسويق والرقابة العقارية",
+    "maintenanceMode": false,
+    "defaultCurrency": "YER",
+    "allowNewRegistrations": true,
+    "allowPublicListingPublish": true,
+    "requirePhoneOtp": true,
+    "requireIdentityVerificationForAd": false,
+    "maxDailyListingsPerUser": 10,
+    "sessionTimeoutMinutes": 60,
+    "maxFailedLoginAttempts": 5,
+    "contactEmail": "admin@dalani-ye.com",
+    "contactPhone": "+967 1 200300",
+    "smsNotificationEnabled": true,
+    "emailNotificationEnabled": true,
+    "adminAlertsPhone": "+967 777 000 111"
+  },
+  "featureFlags": [
+    {
+      "id": "ff-1",
+      "key": "public_registrations",
+      "name": "تسجيل الحسابات الجديدة للجمهور",
+      "description": "السماح للزوار بإنشاء حسابات باحث ومعلن فردي عبر رقم الهاتف",
+      "enabled": true,
+      "category": "core",
+      "updatedAt": "2026-10-15"
+    },
+    {
+      "id": "ff-2",
+      "key": "strict_sms_otp",
+      "name": "إلزامية التحقق بـ SMS OTP",
+      "description": "إرسال رمز تحقق صالح لمرة واحدة عند كل تسجيل دخول أو نشر إعلان",
+      "enabled": true,
+      "category": "security",
+      "updatedAt": "2026-10-16"
+    },
+    {
+      "id": "ff-3",
+      "key": "direct_broker_chat",
+      "name": "المحادثات المباشرة بين الباحث والمعلن",
+      "description": "تفعيل المحادثات الفورية عبر الموقع الداخلي إلى جانب الواتساب والاتصال",
+      "enabled": true,
+      "category": "commercial",
+      "updatedAt": "2026-10-12"
+    },
+    {
+      "id": "ff-4",
+      "key": "ai_listing_enhancer",
+      "name": "مساعد الذكاء الاصطناعي لصياغة الإعلانات",
+      "description": "توليد تفاصيل المواصفات العقارية وتنسيق وصف العقار آلياً",
+      "enabled": true,
+      "category": "experimental",
+      "updatedAt": "2026-10-10"
+    },
+    {
+      "id": "ff-5",
+      "key": "watermark_uploaded_images",
+      "name": "إضافة علامة مائية تلقائية للصور",
+      "description": "دمج شعار دلالي على كافة صور العقارات لمنع سرقتها وإعادة نشرها",
+      "enabled": true,
+      "category": "core",
+      "updatedAt": "2026-10-08"
+    },
+    {
+      "id": "ff-6",
+      "key": "mandatory_deed_check_over_50m",
+      "name": "الفحص الإلزامي للبصيرة للعقارات الكبيرة",
+      "description": "إلزام فحص وثيقة الملكية والبصيرة لأي عقار تتجاوز قيمته 50 مليون ريال",
+      "enabled": false,
+      "category": "security",
+      "updatedAt": "2026-10-17"
+    }
+  ],
+  "backups": [
+    {
+      "id": "bkp-1792251479871",
+      "fileName": "dalani_backup_2026-10-17T15-37-59-870Z.json",
+      "createdAt": "2026-10-17 15:37",
+      "createdBy": "المهندس / مدير النظام العام",
+      "sizeBytes": 63318,
+      "recordsCount": {
+        "listings": 11,
+        "users": 10,
+        "organizations": 2,
+        "auditLogs": 10,
+        "verifications": 4,
+        "reports": 2,
+        "tickets": 2
+      },
+      "checksumSha256": "397d1e915c023b40e5a0a7f29b20e6e24eb4aad203cc85a4a6a7f701eaa15b4e",
+      "status": "valid",
+      "notes": "اختبار النسخ الاحتياطي التلقائي"
+    },
+    {
+      "id": "bkp-1",
+      "fileName": "dalani_backup_2026_10_16_daily.json",
+      "createdAt": "2026-10-16 23:59",
+      "createdBy": "النظام (نسخ تلقائي مجدول)",
+      "sizeBytes": 428512,
+      "recordsCount": {
+        "listings": 8,
+        "users": 10,
+        "organizations": 2,
+        "auditLogs": 15,
+        "verifications": 3,
+        "reports": 3,
+        "tickets": 3
+      },
+      "checksumSha256": "a1b2c3d4e5f67890123456789abcdef0123456789abcdef0123456789abcdef0",
+      "status": "valid",
+      "notes": "نسخة احتياطية مكتملة ومفحوصة لجميع الكيانات والعلاقات"
+    }
+  ],
+  "systemErrors": [
+    {
+      "id": "err-1",
+      "timestamp": "2026-10-17 06:12",
+      "code": "SMS_GATEWAY_TIMEOUT",
+      "module": "YemenMobileGateway",
+      "message": "تأخر استجابة بوابة الرسائل القصيرة لرمز التحقق (أكثر من 5 ثوانٍ)",
+      "severity": "warning",
+      "status": "resolved",
+      "resolvedAt": "2026-10-17 06:15",
+      "resolvedBy": "النظام (إعادة المحاولة التلقائية)"
+    },
+    {
+      "id": "err-2",
+      "timestamp": "2026-10-17 07:30",
+      "code": "STORAGE_QUOTA_WARN",
+      "module": "MediaCloudStorage",
+      "message": "استهلاك التخزين وصل إلى 68% من السعة المحددة للوسائط والصور",
+      "severity": "warning",
+      "status": "open"
+    }
+  ],
+  "integrations": [
+    {
+      "id": "int-1",
+      "name": "بوابة رسائل يمن موبايل (Yemen Mobile SMS Gateway)",
+      "type": "sms_gateway",
+      "endpoint": "https://sms.yemenmobile.com.ye/api/v2/send",
+      "status": "online",
+      "latencyMs": 72,
+      "lastCheckedAt": "2026-10-17 15:38"
+    },
+    {
+      "id": "int-2",
+      "name": "بوابة رسائل سبأفون (Sabafon SMS API)",
+      "type": "sms_gateway",
+      "endpoint": "https://bulksms.sabafon.com/api/send",
+      "status": "online",
+      "latencyMs": 168,
+      "lastCheckedAt": "2026-10-17 08:15"
+    },
+    {
+      "id": "int-3",
+      "name": "خادم تخزين الوثائق والصور (Private Cloud S3)",
+      "type": "cloud_storage",
+      "endpoint": "https://storage.dalani-ye.com/vault",
+      "status": "online",
+      "latencyMs": 45,
+      "lastCheckedAt": "2026-10-17 08:20"
+    },
+    {
+      "id": "int-4",
+      "name": "خادم البريد الإلكتروني الحكومي والمهني (SMTP)",
+      "type": "email_smtp",
+      "endpoint": "smtp.dalani-ye.com:587",
+      "status": "online",
+      "latencyMs": 82,
+      "lastCheckedAt": "2026-10-17 08:10"
+    }
+  ],
+  "escalations": [
+    {
+      "id": "esc-1",
+      "caseNumber": "ESC-2026-004",
+      "title": "نزاع ملكية عقار تجاري في شارع الزبيري (مبلغ نزاع > 100 مليون)",
+      "sourceType": "report",
+      "sourceId": "rep-002",
+      "submittedBy": "مسؤول البلاغات (أ. عادل النجار)",
+      "priority": "critical",
+      "status": "pending_admin",
+      "description": "قام معلنان مختلفان برفع إعلانات بيع لنفس العقار التجاري بوثائق متضاربة تتطلب قرار الإدارة العليا لإيقاف كلا الإعلانين لحين استكمال التحري القضائي.",
+      "createdAt": "2026-10-17 07:45"
+    },
+    {
+      "id": "esc-2",
+      "caseNumber": "ESC-2026-005",
+      "title": "طلب استثناء نشر إعلان لمكتب عقاري معلق ترخيصه مؤقتاً",
+      "sourceType": "staff_override",
+      "sourceId": "org-2",
+      "submittedBy": "مسؤول التحقق (د. سمير الذماري)",
+      "priority": "medium",
+      "status": "pending_admin",
+      "description": "المكتب قدم إفادة تجديد من وزارة الصناعة وقيد مراجعة الغرفة التجارية، ويطلب الإذن المؤقت لمدة 14 يوماً.",
+      "createdAt": "2026-10-17 08:10"
+    }
+  ]
 }

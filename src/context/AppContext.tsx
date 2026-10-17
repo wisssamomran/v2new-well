@@ -8,7 +8,17 @@ import {
   SupportTicket,
   AuditLogEntry,
   Organization,
-  ListingStatus
+  ListingStatus,
+  StaffMember,
+  ActiveSession,
+  SecurityThreat,
+  BlockedIp,
+  SystemSettings,
+  FeatureFlag,
+  BackupPoint,
+  SystemErrorLog,
+  IntegrationServiceStatus,
+  EscalationCase
 } from '../types';
 import {
   INITIAL_LISTINGS,
@@ -73,6 +83,44 @@ interface AppContextType {
   showToast: (message: string, type?: Toast['type']) => void;
   removeToast: (id: string) => void;
   
+  // Enterprise Admin & Governance State
+  users: User[];
+  staff: StaffMember[];
+  rolesMatrix: Record<string, string[]>;
+  activeSessions: ActiveSession[];
+  threats: SecurityThreat[];
+  blockedIps: BlockedIp[];
+  systemSettings: SystemSettings;
+  featureFlags: FeatureFlag[];
+  backups: BackupPoint[];
+  systemErrors: SystemErrorLog[];
+  integrations: IntegrationServiceStatus[];
+  escalations: EscalationCase[];
+  reportsSummary: any;
+  adminLoading: boolean;
+
+  // Enterprise Admin Actions
+  fetchAdminData: () => Promise<void>;
+  updateUserAdmin: (id: string, updates: Partial<User>) => Promise<boolean>;
+  toggleUserStatusAdmin: (id: string) => Promise<boolean>;
+  addStaffAdmin: (staffData: any) => Promise<boolean>;
+  toggleStaffStatusAdmin: (id: string) => Promise<boolean>;
+  updateStaffPermissionsAdmin: (id: string, permissions: string[]) => Promise<boolean>;
+  updateRolesMatrixAdmin: (matrix: Record<string, string[]>) => Promise<boolean>;
+  terminateSessionAdmin: (sessionId: string) => Promise<boolean>;
+  blockIpAdmin: (ip: string, reason: string) => Promise<boolean>;
+  unblockIpAdmin: (ip: string) => Promise<boolean>;
+  updateSecurityPoliciesAdmin: (policies: any) => Promise<boolean>;
+  updateSystemSettingsAdmin: (settings: Partial<SystemSettings>) => Promise<boolean>;
+  toggleFeatureFlagAdmin: (key: string) => Promise<boolean>;
+  createBackupAdmin: (notes?: string) => Promise<BackupPoint | null>;
+  restoreBackupAdmin: (backupId: string) => Promise<{ success: boolean; message: string }>;
+  resolveSystemErrorAdmin: (id: string) => Promise<boolean>;
+  checkDataIntegrityAdmin: () => Promise<any>;
+  repairDataIntegrityAdmin: () => Promise<{ repairedCount: number; summary: string } | null>;
+  pingIntegrationAdmin: (id: string) => Promise<IntegrationServiceStatus | null>;
+  resolveEscalationAdmin: (id: string, status: 'approved' | 'rejected', notes: string) => Promise<boolean>;
+
   // Refresh & Reset
   refreshData: () => Promise<void>;
   resetToInitialData: () => void;
@@ -194,6 +242,39 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     setToasts(prev => prev.filter(t => t.id !== id));
   };
 
+  // Enterprise Admin & Governance State
+  const [users, setUsers] = useState<User[]>(() => Object.values(MOCK_USERS));
+  const [staff, setStaff] = useState<StaffMember[]>([]);
+  const [rolesMatrix, setRolesMatrix] = useState<Record<string, string[]>>({});
+  const [activeSessions, setActiveSessions] = useState<ActiveSession[]>([]);
+  const [threats, setThreats] = useState<SecurityThreat[]>([]);
+  const [blockedIps, setBlockedIps] = useState<BlockedIp[]>([]);
+  const [systemSettings, setSystemSettings] = useState<SystemSettings>({
+    platformName: 'منصة دلالي العقارية اليمنية',
+    platformTagline: 'المنظومة الوطنية الموثوقة للتسويق والرقابة العقارية',
+    maintenanceMode: false,
+    defaultCurrency: 'YER',
+    allowNewRegistrations: true,
+    allowPublicListingPublish: true,
+    requirePhoneOtp: true,
+    requireIdentityVerificationForAd: false,
+    maxDailyListingsPerUser: 10,
+    sessionTimeoutMinutes: 60,
+    maxFailedLoginAttempts: 5,
+    contactEmail: 'admin@dalani-ye.com',
+    contactPhone: '+967 1 200300',
+    smsNotificationEnabled: true,
+    emailNotificationEnabled: true,
+    adminAlertsPhone: '+967 777 000 111'
+  });
+  const [featureFlags, setFeatureFlags] = useState<FeatureFlag[]>([]);
+  const [backups, setBackups] = useState<BackupPoint[]>([]);
+  const [systemErrors, setSystemErrors] = useState<SystemErrorLog[]>([]);
+  const [integrations, setIntegrations] = useState<IntegrationServiceStatus[]>([]);
+  const [escalations, setEscalations] = useState<EscalationCase[]>([]);
+  const [reportsSummary, setReportsSummary] = useState<any>(null);
+  const [adminLoading, setAdminLoading] = useState<boolean>(false);
+
   // Helper for authenticated server requests
   const apiFetch = useCallback(async (url: string, options: RequestInit = {}) => {
     const headers = {
@@ -211,6 +292,456 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   }, [currentUser]);
 
+  // Fetch all admin data
+  const fetchAdminData = useCallback(async () => {
+    if (currentUser.role !== 'system_admin') return;
+    setAdminLoading(true);
+    try {
+      const [
+        usersRes, staffRes, rolesRes, sessionsRes, threatsRes, blockedRes,
+        settingsRes, flagsRes, backupsRes, errorsRes, integrationsRes,
+        escalationsRes, summaryRes, auditRes
+      ] = await Promise.all([
+        apiFetch('/api/admin/users'),
+        apiFetch('/api/admin/staff'),
+        apiFetch('/api/admin/roles-matrix'),
+        apiFetch('/api/admin/sessions'),
+        apiFetch('/api/admin/security/threats'),
+        apiFetch('/api/admin/security/blocked-ips'),
+        apiFetch('/api/admin/settings'),
+        apiFetch('/api/admin/feature-flags'),
+        apiFetch('/api/admin/backups'),
+        apiFetch('/api/admin/system/errors'),
+        apiFetch('/api/admin/integrations'),
+        apiFetch('/api/admin/escalations'),
+        apiFetch('/api/admin/reports/summary'),
+        apiFetch('/api/audit-logs')
+      ]);
+
+      if (usersRes?.ok) { const d = await usersRes.json(); setUsers(d.users || []); }
+      if (staffRes?.ok) { const d = await staffRes.json(); setStaff(d.staff || []); }
+      if (rolesRes?.ok) { const d = await rolesRes.json(); setRolesMatrix(d.rolesMatrix || {}); }
+      if (sessionsRes?.ok) { const d = await sessionsRes.json(); setActiveSessions(d.sessions || []); }
+      if (threatsRes?.ok) { const d = await threatsRes.json(); setThreats(d.threats || []); }
+      if (blockedRes?.ok) { const d = await blockedRes.json(); setBlockedIps(d.blockedIps || []); }
+      if (settingsRes?.ok) { const d = await settingsRes.json(); setSystemSettings(d.settings); }
+      if (flagsRes?.ok) { const d = await flagsRes.json(); setFeatureFlags(d.featureFlags || []); }
+      if (backupsRes?.ok) { const d = await backupsRes.json(); setBackups(d.backups || []); }
+      if (errorsRes?.ok) { const d = await errorsRes.json(); setSystemErrors(d.errors || []); }
+      if (integrationsRes?.ok) { const d = await integrationsRes.json(); setIntegrations(d.integrations || []); }
+      if (escalationsRes?.ok) { const d = await escalationsRes.json(); setEscalations(d.escalations || []); }
+      if (summaryRes?.ok) { const d = await summaryRes.json(); setReportsSummary(d.summary); }
+      if (auditRes?.ok) { const d = await auditRes.json(); setAuditLogs(d.logs || []); }
+    } catch (e) {
+      console.warn('[Dalani Admin] Error fetching admin data:', e);
+    } finally {
+      setAdminLoading(false);
+    }
+  }, [apiFetch, currentUser.role]);
+
+  // Admin Action Handlers
+  const updateUserAdmin = async (id: string, updates: Partial<User>): Promise<boolean> => {
+    try {
+      const res = await apiFetch(`/api/admin/users/${id}`, {
+        method: 'PATCH',
+        body: JSON.stringify(updates)
+      });
+      if (res && res.ok) {
+        const data = await res.json();
+        setUsers(prev => prev.map(u => (u.id === id ? data.user : u)));
+        showToast('تم تحديث بيانات المستخدم بنجاح', 'success');
+        fetchAdminData();
+        return true;
+      } else {
+        const err = await res?.json();
+        showToast(err?.error || 'فشل تحديث بيانات المستخدم', 'error');
+        return false;
+      }
+    } catch {
+      showToast('خطأ في الاتصال بالخادم', 'error');
+      return false;
+    }
+  };
+
+  const toggleUserStatusAdmin = async (id: string): Promise<boolean> => {
+    try {
+      const res = await apiFetch(`/api/admin/users/${id}/toggle-status`, { method: 'POST' });
+      if (res && res.ok) {
+        const data = await res.json();
+        setUsers(prev => prev.map(u => (u.id === id ? data.user : u)));
+        showToast(data.message, 'success');
+        fetchAdminData();
+        return true;
+      } else {
+        const err = await res?.json();
+        showToast(err?.error || 'فشل تغيير حالة الحساب', 'error');
+        return false;
+      }
+    } catch {
+      showToast('خطأ في الاتصال بالخادم', 'error');
+      return false;
+    }
+  };
+
+  const addStaffAdmin = async (staffData: any): Promise<boolean> => {
+    try {
+      const res = await apiFetch('/api/admin/staff', {
+        method: 'POST',
+        body: JSON.stringify(staffData)
+      });
+      if (res && res.ok) {
+        const data = await res.json();
+        setStaff(prev => [data.staff, ...prev]);
+        showToast('تم إنشاء حساب الموظف بنجاح', 'success');
+        fetchAdminData();
+        return true;
+      } else {
+        const err = await res?.json();
+        showToast(err?.error || 'فشل إنشاء حساب الموظف', 'error');
+        return false;
+      }
+    } catch {
+      showToast('خطأ في الاتصال بالخادم', 'error');
+      return false;
+    }
+  };
+
+  const toggleStaffStatusAdmin = async (id: string): Promise<boolean> => {
+    try {
+      const res = await apiFetch(`/api/admin/staff/${id}/status`, { method: 'PATCH' });
+      if (res && res.ok) {
+        const data = await res.json();
+        setStaff(prev => prev.map(s => (s.id === id ? data.staff : s)));
+        showToast(data.message, 'success');
+        fetchAdminData();
+        return true;
+      } else {
+        const err = await res?.json();
+        showToast(err?.error || 'فشل تعديل حالة الموظف', 'error');
+        return false;
+      }
+    } catch {
+      showToast('خطأ في الاتصال بالخادم', 'error');
+      return false;
+    }
+  };
+
+  const updateStaffPermissionsAdmin = async (id: string, permissions: string[]): Promise<boolean> => {
+    try {
+      const res = await apiFetch(`/api/admin/staff/${id}/permissions`, {
+        method: 'PATCH',
+        body: JSON.stringify({ permissions })
+      });
+      if (res && res.ok) {
+        const data = await res.json();
+        setStaff(prev => prev.map(s => (s.id === id ? data.staff : s)));
+        showToast('تم حفظ صلاحيات الموظف بنجاح', 'success');
+        fetchAdminData();
+        return true;
+      } else {
+        const err = await res?.json();
+        showToast(err?.error || 'فشل تحديث الصلاحيات', 'error');
+        return false;
+      }
+    } catch {
+      showToast('خطأ في الاتصال بالخادم', 'error');
+      return false;
+    }
+  };
+
+  const updateRolesMatrixAdmin = async (matrix: Record<string, string[]>): Promise<boolean> => {
+    try {
+      const res = await apiFetch('/api/admin/roles-matrix', {
+        method: 'PUT',
+        body: JSON.stringify({ rolesMatrix: matrix })
+      });
+      if (res && res.ok) {
+        const data = await res.json();
+        setRolesMatrix(data.rolesMatrix);
+        showToast('تم حفظ مصفوفة الصلاحيات بالخادم بنجاح', 'success');
+        fetchAdminData();
+        return true;
+      } else {
+        const err = await res?.json();
+        showToast(err?.error || 'فشل حفظ المصفوفة', 'error');
+        return false;
+      }
+    } catch {
+      showToast('خطأ في الاتصال بالخادم', 'error');
+      return false;
+    }
+  };
+
+  const terminateSessionAdmin = async (sessionId: string): Promise<boolean> => {
+    try {
+      const res = await apiFetch(`/api/admin/sessions/${sessionId}`, { method: 'DELETE' });
+      if (res && res.ok) {
+        setActiveSessions(prev => prev.filter(s => s.id !== sessionId && s.sessionId !== sessionId));
+        showToast('تم إنهاء الجلسة وإبطالها فعلياً من الخادم', 'success');
+        fetchAdminData();
+        return true;
+      } else {
+        const err = await res?.json();
+        showToast(err?.error || 'فشل إنهاء الجلسة', 'error');
+        return false;
+      }
+    } catch {
+      showToast('خطأ في الاتصال بالخادم', 'error');
+      return false;
+    }
+  };
+
+  const blockIpAdmin = async (ip: string, reason: string): Promise<boolean> => {
+    try {
+      const res = await apiFetch('/api/admin/security/block-ip', {
+        method: 'POST',
+        body: JSON.stringify({ ip, reason })
+      });
+      if (res && res.ok) {
+        const data = await res.json();
+        setBlockedIps(prev => [data.blocked, ...prev]);
+        setThreats(prev => prev.map(t => (t.ipAddress === ip ? { ...t, blocked: true } : t)));
+        showToast('تم حظر عنوان الـ IP بنجاح في طبقة الخادم', 'success');
+        fetchAdminData();
+        return true;
+      } else {
+        const err = await res?.json();
+        showToast(err?.error || 'فشل حظر العنوان', 'error');
+        return false;
+      }
+    } catch {
+      showToast('خطأ في الاتصال بالخادم', 'error');
+      return false;
+    }
+  };
+
+  const unblockIpAdmin = async (ip: string): Promise<boolean> => {
+    try {
+      const res = await apiFetch('/api/admin/security/unblock-ip', {
+        method: 'POST',
+        body: JSON.stringify({ ip })
+      });
+      if (res && res.ok) {
+        setBlockedIps(prev => prev.filter(b => b.ip !== ip));
+        setThreats(prev => prev.map(t => (t.ipAddress === ip ? { ...t, blocked: false } : t)));
+        showToast('تم رفع الحظر عن عنوان الـ IP بنجاح', 'success');
+        fetchAdminData();
+        return true;
+      } else {
+        const err = await res?.json();
+        showToast(err?.error || 'فشل فك الحظر', 'error');
+        return false;
+      }
+    } catch {
+      showToast('خطأ في الاتصال بالخادم', 'error');
+      return false;
+    }
+  };
+
+  const updateSecurityPoliciesAdmin = async (policies: any): Promise<boolean> => {
+    try {
+      const res = await apiFetch('/api/admin/security/policies', {
+        method: 'PUT',
+        body: JSON.stringify(policies)
+      });
+      if (res && res.ok) {
+        const data = await res.json();
+        setSystemSettings(data.settings);
+        showToast('تم تحديث سياسات الأمان بنجاح', 'success');
+        fetchAdminData();
+        return true;
+      } else {
+        const err = await res?.json();
+        showToast(err?.error || 'فشل تحديث سياسات الأمان', 'error');
+        return false;
+      }
+    } catch {
+      showToast('خطأ في الاتصال بالخادم', 'error');
+      return false;
+    }
+  };
+
+  const updateSystemSettingsAdmin = async (settings: Partial<SystemSettings>): Promise<boolean> => {
+    try {
+      const res = await apiFetch('/api/admin/settings', {
+        method: 'PUT',
+        body: JSON.stringify(settings)
+      });
+      if (res && res.ok) {
+        const data = await res.json();
+        setSystemSettings(data.settings);
+        showToast('تم حفظ إعدادات المنظومة بنجاح', 'success');
+        fetchAdminData();
+        return true;
+      } else {
+        const err = await res?.json();
+        showToast(err?.error || 'فشل تحديث الإعدادات', 'error');
+        return false;
+      }
+    } catch {
+      showToast('خطأ في الاتصال بالخادم', 'error');
+      return false;
+    }
+  };
+
+  const toggleFeatureFlagAdmin = async (key: string): Promise<boolean> => {
+    try {
+      const res = await apiFetch(`/api/admin/feature-flags/${key}/toggle`, { method: 'POST' });
+      if (res && res.ok) {
+        const data = await res.json();
+        setFeatureFlags(prev => prev.map(f => (f.key === key ? data.flag : f)));
+        showToast(data.message, 'success');
+        fetchAdminData();
+        return true;
+      } else {
+        const err = await res?.json();
+        showToast(err?.error || 'فشل تبديل الميزة', 'error');
+        return false;
+      }
+    } catch {
+      showToast('خطأ في الاتصال بالخادم', 'error');
+      return false;
+    }
+  };
+
+  const createBackupAdmin = async (notes?: string): Promise<BackupPoint | null> => {
+    try {
+      const res = await apiFetch('/api/admin/backups/create', {
+        method: 'POST',
+        body: JSON.stringify({ notes })
+      });
+      if (res && res.ok) {
+        const data = await res.json();
+        setBackups(prev => [data.backup, ...prev]);
+        showToast('تم إنشاء نسخة احتياطية جديدة موثقة بنجاح', 'success');
+        fetchAdminData();
+        return data.backup;
+      } else {
+        const err = await res?.json();
+        showToast(err?.error || 'فشل إنشاء النسخة الاحتياطية', 'error');
+        return null;
+      }
+    } catch {
+      showToast('خطأ في الاتصال بالخادم', 'error');
+      return null;
+    }
+  };
+
+  const restoreBackupAdmin = async (backupId: string): Promise<{ success: boolean; message: string }> => {
+    try {
+      const res = await apiFetch('/api/admin/backups/restore', {
+        method: 'POST',
+        body: JSON.stringify({ backupId })
+      });
+      if (res && res.ok) {
+        const data = await res.json();
+        showToast(data.message, 'success');
+        await refreshData();
+        await fetchAdminData();
+        return { success: true, message: data.message };
+      } else {
+        const err = await res?.json();
+        const msg = err?.error || 'فشلت عملية الاسترجاع';
+        showToast(msg, 'error');
+        return { success: false, message: msg };
+      }
+    } catch {
+      const msg = 'خطأ أثناء الاتصال بالخادم';
+      showToast(msg, 'error');
+      return { success: false, message: msg };
+    }
+  };
+
+  const resolveSystemErrorAdmin = async (id: string): Promise<boolean> => {
+    try {
+      const res = await apiFetch(`/api/admin/system/errors/${id}/resolve`, { method: 'PATCH' });
+      if (res && res.ok) {
+        const data = await res.json();
+        setSystemErrors(prev => prev.map(e => (e.id === id ? data.error : e)));
+        showToast('تم إغلاق الخطأ وتحديث حالته بنجاح', 'success');
+        fetchAdminData();
+        return true;
+      } else {
+        showToast('فشل تحديث حالة الخطأ', 'error');
+        return false;
+      }
+    } catch {
+      showToast('خطأ في الاتصال بالخادم', 'error');
+      return false;
+    }
+  };
+
+  const checkDataIntegrityAdmin = async (): Promise<any> => {
+    try {
+      const res = await apiFetch('/api/admin/database/integrity-check');
+      if (res && res.ok) {
+        const data = await res.json();
+        return data.report;
+      }
+      return null;
+    } catch {
+      return null;
+    }
+  };
+
+  const repairDataIntegrityAdmin = async (): Promise<{ repairedCount: number; summary: string } | null> => {
+    try {
+      const res = await apiFetch('/api/admin/database/repair', { method: 'POST' });
+      if (res && res.ok) {
+        const data = await res.json();
+        showToast(data.result?.summary || 'تم فحص وإصلاح العلاقات بنجاح', 'success');
+        fetchAdminData();
+        return data.result;
+      }
+      return null;
+    } catch {
+      showToast('خطأ في الاتصال بالخادم', 'error');
+      return null;
+    }
+  };
+
+  const pingIntegrationAdmin = async (id: string): Promise<IntegrationServiceStatus | null> => {
+    try {
+      const res = await apiFetch(`/api/admin/integrations/${id}/ping`, { method: 'POST' });
+      if (res && res.ok) {
+        const data = await res.json();
+        setIntegrations(prev => prev.map(i => (i.id === id ? data.integration : i)));
+        showToast(data.message, 'success');
+        return data.integration;
+      } else {
+        const err = await res?.json();
+        showToast(err?.message || 'فشل فحص الاتصال', 'error');
+        return null;
+      }
+    } catch {
+      showToast('خطأ في الاتصال بالخادم', 'error');
+      return null;
+    }
+  };
+
+  const resolveEscalationAdmin = async (id: string, status: 'approved' | 'rejected', notes: string): Promise<boolean> => {
+    try {
+      const res = await apiFetch(`/api/admin/escalations/${id}/resolve`, {
+        method: 'POST',
+        body: JSON.stringify({ status, notes })
+      });
+      if (res && res.ok) {
+        const data = await res.json();
+        setEscalations(prev => prev.map(e => (e.id === id ? data.escalation : e)));
+        showToast(data.message, 'success');
+        fetchAdminData();
+        return true;
+      } else {
+        const err = await res?.json();
+        showToast(err?.error || 'فشل تسجيل القرار', 'error');
+        return false;
+      }
+    } catch {
+      showToast('خطأ في الاتصال بالخادم', 'error');
+      return false;
+    }
+  };
+
   // Sync data from Server API
   const refreshData = useCallback(async () => {
     try {
@@ -224,20 +755,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         }
       }
 
-      // If privileged role, load audit logs
+      // If privileged role, load audit logs and admin governance suite
       if (currentUser.role === 'system_admin') {
-        const auditRes = await apiFetch('/api/audit-logs');
-        if (auditRes && auditRes.ok) {
-          const auditData = await auditRes.json();
-          if (auditData.logs) {
-            setAuditLogs(auditData.logs);
-          }
-        }
+        fetchAdminData();
       }
     } catch (e) {
       console.warn('[Dalani Client] Server sync fallback to local cache:', e);
     }
-  }, [apiFetch, currentUser.role]);
+  }, [apiFetch, currentUser.role, fetchAdminData]);
 
   // Initial load and whenever role changes
   useEffect(() => {
@@ -822,7 +1347,43 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         showToast,
         removeToast,
         refreshData,
-        resetToInitialData
+        resetToInitialData,
+
+        // Enterprise Admin & Governance
+        users,
+        staff,
+        rolesMatrix,
+        activeSessions,
+        threats,
+        blockedIps,
+        systemSettings,
+        featureFlags,
+        backups,
+        systemErrors,
+        integrations,
+        escalations,
+        reportsSummary,
+        adminLoading,
+        fetchAdminData,
+        updateUserAdmin,
+        toggleUserStatusAdmin,
+        addStaffAdmin,
+        toggleStaffStatusAdmin,
+        updateStaffPermissionsAdmin,
+        updateRolesMatrixAdmin,
+        terminateSessionAdmin,
+        blockIpAdmin,
+        unblockIpAdmin,
+        updateSecurityPoliciesAdmin,
+        updateSystemSettingsAdmin,
+        toggleFeatureFlagAdmin,
+        createBackupAdmin,
+        restoreBackupAdmin,
+        resolveSystemErrorAdmin,
+        checkDataIntegrityAdmin,
+        repairDataIntegrityAdmin,
+        pingIntegrationAdmin,
+        resolveEscalationAdmin
       }}
     >
       {children}

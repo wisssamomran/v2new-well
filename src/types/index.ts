@@ -264,7 +264,7 @@ export interface AuditLogEntry {
   userName: string;
   userRole: UserRole;
   action: string;
-  targetType: 'listing' | 'user' | 'organization' | 'verification' | 'report' | 'ticket' | 'system_setting';
+  targetType: 'listing' | 'user' | 'organization' | 'verification' | 'report' | 'ticket' | 'system_setting' | 'staff' | 'security' | 'backup' | 'feature_flag' | 'permission';
   targetId: string;
   result: 'success' | 'warning' | 'denied';
   details: string;
@@ -280,3 +280,154 @@ export interface GovernorateData {
     districts: string[];
   }[];
 }
+
+// ==========================================
+// ENTERPRISE ADMIN & GOVERNANCE TYPES
+// ==========================================
+
+export interface StaffMember {
+  id: string;
+  userId: string;
+  name: string;
+  email?: string;
+  phone: string;
+  role: UserRole;
+  department: 'management' | 'moderation' | 'verification' | 'disputes' | 'support' | 'finance' | 'it';
+  activeStatus: boolean;
+  permissions: string[];
+  createdAt: string;
+  lastLoginAt?: string;
+  notes?: string;
+}
+
+export interface StaffPermission {
+  id: string;
+  code: string;
+  label: string;
+  category: 'general' | 'content' | 'verification' | 'security' | 'financial' | 'sensitive';
+  description: string;
+}
+
+export interface ActiveSession {
+  id: string;
+  sessionId: string;
+  userId: string;
+  userName: string;
+  userRole: UserRole;
+  ipAddress: string;
+  userAgent: string;
+  deviceType: 'desktop' | 'mobile' | 'tablet';
+  location: string;
+  startedAt: string;
+  lastActiveAt: string;
+  isCurrentSession?: boolean;
+}
+
+export interface SecurityThreat {
+  id: string;
+  ipAddress: string;
+  attemptType: 'failed_login' | 'unauthorized_role_elevation' | 'sql_injection_attempt' | 'brute_force' | 'suspicious_headers';
+  targetUsername?: string;
+  occurredAt: string;
+  country: string;
+  city: string;
+  severity: 'low' | 'medium' | 'high' | 'critical';
+  blocked: boolean;
+  details: string;
+}
+
+export interface BlockedIp {
+  ip: string;
+  reason: string;
+  blockedAt: string;
+  blockedBy: string;
+}
+
+export interface SystemSettings {
+  platformName: string;
+  platformTagline: string;
+  maintenanceMode: boolean;
+  defaultCurrency: Currency;
+  allowNewRegistrations: boolean;
+  allowPublicListingPublish: boolean;
+  requirePhoneOtp: boolean;
+  requireIdentityVerificationForAd: boolean;
+  maxDailyListingsPerUser: number;
+  sessionTimeoutMinutes: number;
+  maxFailedLoginAttempts: number;
+  contactEmail: string;
+  contactPhone: string;
+  smsNotificationEnabled: boolean;
+  emailNotificationEnabled: boolean;
+  adminAlertsPhone: string;
+}
+
+export interface FeatureFlag {
+  id: string;
+  key: string;
+  name: string;
+  description: string;
+  enabled: boolean;
+  category: 'core' | 'security' | 'commercial' | 'experimental';
+  updatedAt: string;
+}
+
+export interface BackupPoint {
+  id: string;
+  fileName: string;
+  createdAt: string;
+  createdBy: string;
+  sizeBytes: number;
+  recordsCount: {
+    listings: number;
+    users: number;
+    organizations: number;
+    auditLogs: number;
+    verifications: number;
+    reports: number;
+    tickets: number;
+  };
+  checksumSha256: string;
+  status: 'valid' | 'corrupted' | 'restoring';
+  notes?: string;
+}
+
+export interface SystemErrorLog {
+  id: string;
+  timestamp: string;
+  code: string;
+  module: string;
+  message: string;
+  stack?: string;
+  severity: 'warning' | 'error' | 'fatal';
+  status: 'open' | 'investigating' | 'resolved';
+  resolvedAt?: string;
+  resolvedBy?: string;
+}
+
+export interface IntegrationServiceStatus {
+  id: string;
+  name: string;
+  type: 'sms_gateway' | 'cloud_storage' | 'email_smtp' | 'maps_service' | 'payment_switch';
+  endpoint: string;
+  status: 'online' | 'degraded' | 'offline' | 'untested';
+  latencyMs?: number;
+  lastCheckedAt?: string;
+  errorMessage?: string;
+}
+
+export interface EscalationCase {
+  id: string;
+  caseNumber: string;
+  title: string;
+  sourceType: 'report' | 'verification' | 'staff_override' | 'security_alert';
+  sourceId: string;
+  submittedBy: string;
+  priority: 'medium' | 'high' | 'critical';
+  status: 'pending_admin' | 'approved' | 'rejected';
+  description: string;
+  adminResolutionNotes?: string;
+  resolvedAt?: string;
+  createdAt: string;
+}
+

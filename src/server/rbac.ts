@@ -159,6 +159,21 @@ export function recordAuditLog(
  * Resolves user from X-User-Role, Authorization header, or defaults to visitor
  */
 export function authMiddleware(req: Request, res: Response, next: NextFunction) {
+  const rawIp = (req.headers['x-forwarded-for'] as string)?.split(',')[0]?.trim() || req.socket.remoteAddress || '';
+  const clientIp = rawIp.replace('::ffff:', '');
+
+  // 1. IP Blocking Guard (Prevent self-lockout for localhost and system_admin unblocking)
+  if (clientIp && !['127.0.0.1', '::1', 'localhost'].includes(clientIp) && db.isIpBlocked(clientIp)) {
+    const requestedRoleHeader = (req.headers['x-user-role'] as string) || '';
+    if (requestedRoleHeader !== 'system_admin' || !req.path.includes('/security/')) {
+      return res.status(403).json({
+        error: 'تم حظر عنوان الـ IP الخاص بك من قبل إدارة المنظومة لأسباب أمنية.',
+        code: 'IP_BLOCKED',
+        ip: clientIp
+      });
+    }
+  }
+
   const requestedRoleHeader = (req.headers['x-user-role'] as string) || '';
   const authHeader = req.headers['authorization'] || '';
 
@@ -186,6 +201,15 @@ export function authMiddleware(req: Request, res: Response, next: NextFunction) 
       activeStatus: true,
       createdAt: '2026-01-01'
     };
+  }
+
+  // 2. Disabled Account Guard
+  if (user && user.activeStatus === false && req.path !== '/api/auth/me' && !req.path.startsWith('/api/auth/switch-role')) {
+    return res.status(403).json({
+      error: 'تم تعطيل أو إيقاف هذا الحساب إدارياً. يرجى التواصل مع إدارة النظام.',
+      code: 'ACCOUNT_DISABLED',
+      userId: user.id
+    });
   }
 
   req.currentUser = user;
