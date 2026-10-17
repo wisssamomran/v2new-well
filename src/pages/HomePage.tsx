@@ -823,15 +823,28 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectListing 
             {/* Dropdown Menu Popup (Customized Per User Role) */}
             {roleDropdownOpen && (
               <div className="absolute top-full mt-1.5 left-0 sm:left-auto sm:right-0 w-72 sm:w-84 bg-white/98 backdrop-blur-md rounded-2xl shadow-2xl border border-slate-200/95 py-2.5 px-3 z-50 text-xs animate-in fade-in zoom-in-95 duration-150 max-h-[75vh] overflow-y-auto text-right">
-                {/* Header: Role Title & Count */}
+                {/* Header: Role Title & Count & Close Button */}
                 <div className="flex items-center justify-between border-b border-slate-100 pb-2 mb-2">
                   <div className="flex items-center gap-1.5 truncate min-w-0">
                     <Shield className="w-3.5 h-3.5 text-[#12A889] flex-shrink-0" />
                     <span className="font-black text-slate-900 text-xs truncate">{roleMapTitle}</span>
                   </div>
-                  <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-bold border border-emerald-200 flex-shrink-0">
-                    {displayedListings.length} عقار ظاهر
-                  </span>
+                  <div className="flex items-center gap-1.5 flex-shrink-0">
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-bold border border-emerald-200">
+                      {displayedListings.length} عقار ظاهر
+                    </span>
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setRoleDropdownOpen(false);
+                      }}
+                      className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+                      title="إغلاق القائمة"
+                    >
+                      <X className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
                 </div>
 
                 {/* Switch between Role Admin Mode & Public Visitor Preview (For Non-Public Roles) */}
@@ -842,6 +855,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectListing 
                       onClick={() => {
                         setIsAdminMapMode(true);
                         setSelectedListing(null);
+                        setRoleDropdownOpen(false);
                       }}
                       className={`flex-1 py-1 rounded-lg text-[11px] font-bold flex items-center justify-center gap-1 transition-all ${
                         isAdminMapMode
@@ -857,6 +871,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectListing 
                       onClick={() => {
                         setIsAdminMapMode(false);
                         setSelectedListing(null);
+                        setRoleDropdownOpen(false);
                       }}
                       className={`flex-1 py-1 rounded-lg text-[11px] font-bold flex items-center justify-center gap-1 transition-all ${
                         !isAdminMapMode
@@ -900,6 +915,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectListing 
                               onClick={() => {
                                 setVisitorFilter(opt.id as any);
                                 setSelectedListing(null);
+                                setRoleDropdownOpen(false);
                               }}
                               className={`w-full text-right p-2 rounded-xl flex items-center justify-between transition-colors border ${
                                 isSelected
@@ -944,6 +960,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectListing 
                               onClick={() => {
                                 setAdvStatusFilter(tab.id as any);
                                 setSelectedListing(null);
+                                setRoleDropdownOpen(false);
                               }}
                               className={`w-full text-right p-2 rounded-xl flex items-center justify-between transition-colors border ${
                                 isSelected
@@ -989,6 +1006,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectListing 
                                 onClick={() => {
                                   setOrgStatusFilter(tab.id as any);
                                   setSelectedListing(null);
+                                  setRoleDropdownOpen(false);
                                 }}
                                 className={`w-full text-right p-1.5 rounded-xl flex items-center justify-between transition-colors border ${
                                   isSelected
@@ -1015,6 +1033,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectListing 
                             onChange={e => {
                               setOrgAgentFilter(e.target.value);
                               setSelectedListing(null);
+                              setRoleDropdownOpen(false);
                             }}
                             className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded-xl text-xs font-bold text-slate-800"
                           >
@@ -1050,6 +1069,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectListing 
                               onClick={() => {
                                 setAgentStatusFilter(tab.id as any);
                                 setSelectedListing(null);
+                                setRoleDropdownOpen(false);
                               }}
                               className={`w-full text-right p-2 rounded-xl flex items-center justify-between transition-colors border ${
                                 isSelected
@@ -1093,6 +1113,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectListing 
                               onClick={() => {
                                 setModQueueFilter(tab.id as any);
                                 setSelectedListing(null);
+                                setRoleDropdownOpen(false);
                               }}
                               className={`w-full text-right p-2 rounded-xl flex items-center justify-between transition-colors border ${
                                 isSelected
@@ -1134,6 +1155,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectListing 
                               onClick={() => {
                                 setVerStatusFilter(tab.id as any);
                                 setSelectedListing(null);
+                                setRoleDropdownOpen(false);
                               }}
                               className={`w-full text-right p-2 rounded-xl flex items-center justify-between transition-colors border ${
                                 isSelected
@@ -1178,6 +1200,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectListing 
                                 onClick={() => {
                                   setReportStatusFilter(tab.id as any);
                                   setSelectedListing(null);
+                                  setRoleDropdownOpen(false);
                                 }}
                                 className={`w-full text-right p-1.5 rounded-xl flex items-center justify-between transition-colors border ${
                                   isSelected
@@ -1204,6 +1227,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectListing 
                             onChange={e => {
                               setReportSeverityFilter(e.target.value as any);
                               setSelectedListing(null);
+                              setRoleDropdownOpen(false);
                             }}
                             className="w-full px-2 py-1 bg-slate-50 border border-slate-300 rounded-lg text-xs font-bold text-slate-800"
                           >
@@ -1252,6 +1276,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectListing 
                                 onClick={() => {
                                   setFinanceFilter(tab.id as any);
                                   setSelectedListing(null);
+                                  setRoleDropdownOpen(false);
                                 }}
                                 className={`w-full text-right p-1.5 rounded-xl flex items-center justify-between transition-colors border ${
                                   isSelected
@@ -1278,6 +1303,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectListing 
                             onChange={e => {
                               setFinancePackage(e.target.value as any);
                               setSelectedListing(null);
+                              setRoleDropdownOpen(false);
                             }}
                             className="w-full px-2.5 py-1.5 bg-slate-50 border border-slate-300 rounded-lg text-xs font-bold text-slate-800"
                           >
@@ -1305,7 +1331,12 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectListing 
                             type="text"
                             value={supportSearchQuery}
                             onChange={e => setSupportSearchQuery(e.target.value)}
-                            placeholder="بحث برقم الإعلان أو هاتف المعلن..."
+                            onKeyDown={e => {
+                              if (e.key === 'Enter') {
+                                setRoleDropdownOpen(false);
+                              }
+                            }}
+                            placeholder="بحث برقم الإعلان أو هاتف المعلن (اضغط Enter للبحث)..."
                             className="w-full pl-2 pr-7 py-1.5 bg-slate-50 border border-slate-300 rounded-xl text-xs"
                           />
                           <Search className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-2.5" />
@@ -1326,6 +1357,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectListing 
                                 onClick={() => {
                                   setSupportStatusFilter(tab.id as any);
                                   setSelectedListing(null);
+                                  setRoleDropdownOpen(false);
                                 }}
                                 className={`w-full text-right p-1.5 rounded-xl flex items-center justify-between transition-colors border ${
                                   isSelected
@@ -1344,7 +1376,10 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectListing 
                           <input
                             type="checkbox"
                             checked={supportOnlyWithTickets}
-                            onChange={e => setSupportOnlyWithTickets(e.target.checked)}
+                            onChange={e => {
+                              setSupportOnlyWithTickets(e.target.checked);
+                              setRoleDropdownOpen(false);
+                            }}
                             className="w-3.5 h-3.5 text-teal-600 rounded"
                           />
                           <span>عقارات مرتبطة بتذاكر دعم مفتوحة فقط</span>
@@ -1380,6 +1415,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectListing 
                                 onClick={() => {
                                   setAdminStatusFilter(tab.id as any);
                                   setSelectedListing(null);
+                                  setRoleDropdownOpen(false);
                                 }}
                                 className={`w-full text-right p-1.5 rounded-xl flex items-center justify-between transition-colors border ${
                                   isSelected
@@ -1403,6 +1439,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectListing 
                             onChange={e => {
                               setAdminUserTypeFilter(e.target.value as any);
                               setSelectedListing(null);
+                              setRoleDropdownOpen(false);
                             }}
                             className="w-full px-2 py-1 bg-slate-50 border border-slate-300 rounded-lg text-xs font-bold text-slate-800"
                           >
@@ -1415,7 +1452,10 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectListing 
                             <input
                               type="checkbox"
                               checked={adminHasReportsFilter}
-                              onChange={e => setAdminHasReportsFilter(e.target.checked)}
+                              onChange={e => {
+                                setAdminHasReportsFilter(e.target.checked);
+                                setRoleDropdownOpen(false);
+                              }}
                               className="w-3.5 h-3.5 text-purple-600 rounded"
                             />
                             <span>عليها بلاغات أو تتطلب إجراءً إدارياً</span>
@@ -1427,6 +1467,18 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate, onSelectListing 
                         </div>
                       </div>
                     )}
+
+                    {/* Quick Apply / Close Button at bottom */}
+                    <div className="pt-2 border-t border-slate-100">
+                      <button
+                        type="button"
+                        onClick={() => setRoleDropdownOpen(false)}
+                        className="w-full py-1.5 px-3 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs flex items-center justify-center gap-1.5 transition-colors"
+                      >
+                        <Check className="w-3.5 h-3.5 text-emerald-600" />
+                        <span>تطبيق وإغلاق القائمة</span>
+                      </button>
+                    </div>
                   </div>
                 )}
               </div>
